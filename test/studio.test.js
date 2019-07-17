@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
+const Studio = require('../lib/models/Studio');
 
 describe('studio tests', () => {
   beforeAll(() => {
@@ -33,10 +34,24 @@ describe('studio tests', () => {
         });
       });
   });
+  
+  it('gets a studio', async() => {
+    const studios = await Studio.create([
+      { name: 'Studio Ghibli',
+        address: { country: 'Japan' }
+      }
+
+    ]);
+
+    return request(app)
+      .get('/api/v1/studio')
+      .then(res => {
+        const studiosJSON = JSON.parse(JSON.stringify(studios));
+        studiosJSON.forEach(studio => {
+          expect(res.body).toContainEqual(studio);
+        });
+      });
+  });
+
 });
-
-// it('gets a studio', async() => {
-//   const studio = await studio.create([
-
-//   ]);
 
