@@ -21,13 +21,14 @@ describe('studio tests', () => {
 
   it('creates a studio', () => {
     return request(app)
-      . post('/api/v1/studios')
-      .send({ name: 'Studio Ghibli', address: 'somehwere in Japan' })
+      .post('/api/v1/studio')
+      .send({ name: 'Studio Ghibli', address: { country: 'Japan' } })
       .then(res => {
+        console.log(res.body);
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'Studio Ghibli',
-          address: 'somehwere in Japan',
+          address: { country: 'Japan' },
           __v: 0
         });
       });
