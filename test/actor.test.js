@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 require('dotenv').config();
 
 const request = require('supertest');
@@ -48,18 +49,46 @@ describe('actor tests', () => {
     return request(app)
       .get('/api/v1/actor')
       .then(res => {
-        const studiosJSON = JSON.parse(JSON.stringify(actor));
-        studiosJSON.forEach(actor => {
-          expect(res.body).toContainEqual({ name: actor.name, _id: actor._id });
+        const actorsJSON = JSON.parse(JSON.stringify(actor));
+        actorsJSON.forEach(actor => {
+          expect(res.body).toContainEqual({ 
+            name: actor.name, 
+            _id: actor._id });
         });
       });
   });
-});
-
-
-return request(app)
-      .get(`/api/v1/actor/${actor._id}`)
+  it('can delete an actor by id', async() => {
+    const actor = await Actor.create({
+      name: 'Timothy Olyphant',
+      dob: 'May 20th, 1968',
+      pob: 'Hawaii'
+    });
+        
+    return request(app)
+      .delete(`/api/v1/actor/${actor._id}`)
       .then(res => {
         const actorJSON = JSON.parse(JSON.stringify(actor));
-        expect(res.body).toEqual({
-          ...actorJSON,
+        expect(res.body).toEqual({ 
+          name: 'Timothy Olyphant', 
+          _id: actorJSON._id });
+      });
+  });
+});
+    
+
+
+// it('gets actor by id', async() => {
+//   const studio = await Actor.create({
+//     name: 'Timothy Olyphant',
+//     dob: 'May 20th, 1968',
+//     pob: 'Hawaii'
+//   });
+
+//   return request(app)
+//     .get(`/api/v1/actor/${actor._id}`)
+//     .then(res => {
+//       const studioJSON = JSON.parse(JSON.stringify(actor));
+//       expect(res.body).toEqual({
+//         ...actorJSON,
+//       });
+//     });
