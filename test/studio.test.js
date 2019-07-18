@@ -56,14 +56,32 @@ describe('studio tests', () => {
         });
       });
   });
-  it('gets studio by id', async() => {
+  it('can delete a studio by id', async() => {
     const studio = await Studio.create({
       name: 'Studio Ghibli',
       address: { country: 'Japan' }
     });
-
+    
     return request(app)
-      .get('/api/v1/actor');
+      .delete(`/api/v1/studio/${studio._id}`)
+      .then(res => {
+        const studioJSON = JSON.parse(JSON.stringify(studio));
+        expect(res.body).toEqual({ name: 'Studio Ghibli', _id: studioJSON._id });
+      });
   });
 });
 
+// it('gets studio by id', async() => {
+//   const studio = await Studio.create({
+//     name: 'Studio Ghibli',
+//     address: { country: 'Japan' }
+//   });
+
+//   return request(app)
+//     .get(`/api/v1/studio/${studio._id}`)
+//     .then(res => {
+//       const studioJSON = JSON.parse(JSON.stringify(studio));
+//       expect(res.body).toEqual({
+//         ...studioJSON,
+//       });
+//     });
