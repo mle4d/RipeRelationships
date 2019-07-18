@@ -23,9 +23,11 @@ describe('studio tests', () => {
   it('creates a studio', () => {
     return request(app)
       .post('/api/v1/studio')
-      .send({ name: 'Studio Ghibli', address: { country: 'Japan' } })
+      .send({ 
+        name: 'Studio Ghibli',
+        address: { country: 'Japan' }
+      })
       .then(res => {
-        console.log(res.body);
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'Studio Ghibli',
@@ -48,10 +50,20 @@ describe('studio tests', () => {
       .then(res => {
         const studiosJSON = JSON.parse(JSON.stringify(studios));
         studiosJSON.forEach(studio => {
-          expect(res.body).toContainEqual(studio);
+          expect(res.body).toContainEqual({ 
+            name: studio.name, 
+            _id: studio._id });
         });
       });
   });
+  it('gets studio by id', async() => {
+    const studio = await Studio.create({
+      name: 'Studio Ghibli',
+      address: { country: 'Japan' }
+    });
 
+    return request(app)
+      .get('/api/v1/actor');
+  });
 });
 
