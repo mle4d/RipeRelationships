@@ -90,5 +90,10 @@ describe('actor tests', () => {
 //       const actorJSON = JSON.parse(JSON.stringify(actor));
 //       expect(res.body).toEqual({
 //         ...actorJSON,
+//         films: [{
+//          _id: expect.any(String),
+//          title: expect.any(String), 
+//          release: expect.any(String) 
+//        }]
 //       });
 //     });
