@@ -1,4 +1,3 @@
-/* eslint-disable no-unreachable */
 require('dotenv').config();
 
 const request = require('supertest');
@@ -20,13 +19,14 @@ describe('actor tests', () => {
     return mongoose.connection.close();
   });
 
-
   it('creates actor', () => {
     return request(app)
       .post('/api/v1/actor')
-      .send({ name: 'Timothy Olyphant', dob: 'May 20th, 1968', pob: 'Hawaii' })
+      .send({ 
+        name: 'Timothy Olyphant', 
+        dob: 'May 20th, 1968', 
+        pob: 'Hawaii' })
       .then(res => {
-        console.log(res.body);
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'Timothy Olyphant',
@@ -87,7 +87,7 @@ describe('actor tests', () => {
 //   return request(app)
 //     .get(`/api/v1/actor/${actor._id}`)
 //     .then(res => {
-//       const studioJSON = JSON.parse(JSON.stringify(actor));
+//       const actorJSON = JSON.parse(JSON.stringify(actor));
 //       expect(res.body).toEqual({
 //         ...actorJSON,
 //       });

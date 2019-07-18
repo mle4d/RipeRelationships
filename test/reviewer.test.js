@@ -4,8 +4,9 @@ const request = require('supertest');
 const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
+const Reviewer = require('../lib/models/Reviewer');
 
-describe('app routes', () => {
+describe('reviewer routes', () => {
   beforeAll(() => {
     connect();
   });
@@ -17,4 +18,74 @@ describe('app routes', () => {
   afterAll(() => {
     return mongoose.connection.close();
   });
+
+  it('creates reviewer', () => {
+    return request(app)
+      .post('/api/v1/reviewer')
+      .send({ 
+        name: 'Siskel Roeper',
+        company: 'PBS' })
+      .then(res => {
+        console.log(res.body);
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          name: 'Siskel Roeper',
+          company: 'PBS',
+          __v: 0
+        });
+      });
+  });
+  
+  it('gets reviewer', async() => {
+    const reviewer = await Reviewer.create([
+      { name: 'Siskel Roeper',
+        company: 'PBS' 
+      }
+
+    ]);
+
+    return request(app)
+      .get('/api/v1/reviewer')
+      .then(res => {
+        const reviewersJSON = JSON.parse(JSON.stringify(reviewer));
+        reviewersJSON.forEach(reviewer => {
+          expect(res.body).toContainEqual({ 
+            name: reviewer.name, 
+            _id: reviewer._id });
+        });
+      });
+  });
+  it('can delete a reviewer by id', async() => {
+    const reviewer = await Reviewer.create({
+      name: 'Siskel Roeper',
+      company: 'PBS' 
+    });
+        
+    return request(app)
+      .delete(`/api/v1/reviewer/${reviewer._id}`)
+      .then(res => {
+        const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
+        expect(res.body).toEqual({ 
+          name: 'Siskel Roeper',
+          _id: reviewerJSON._id });
+      });
+  });
 });
+    
+
+
+// it('gets reviewer by id', async() => {
+//   const studio = await reviewer.create({
+//     name: 'Siskel Roeper',
+//       company: 'PBS' 
+//   });
+
+//   return request(app)
+//     .get(`/api/v1/reviewer/${reviewer._id}`)
+//     .then(res => {
+//       const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
+//       expect(res.body).toEqual({
+//         ...reviewerJSON,
+//       });
+//     });
+
