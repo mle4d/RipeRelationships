@@ -55,12 +55,32 @@ describe('reviewer routes', () => {
         });
       });
   });
+  it('can update a reviwer by id', async() => {
+    const reviewer = await Reviewer.create({
+      name: 'Siskel Roeper',
+      company: 'PBS' 
+    });
+    return request(app)
+      .put(`/api/v1/reviewer/${reviewer._id}`)
+      .send({ 
+        name: 'Gene Roger', 
+        company: 'SBP' })
+      .then(res => {
+        const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
+        expect(res.body).toEqual({
+          ...reviewerJSON,
+          _id: expect.any(String),
+          name: 'Gene Roger',
+          company: 'SBP',
+          __v: 0
+        });
+      });
+  });
   it('can delete a reviewer by id', async() => {
     const reviewer = await Reviewer.create({
       name: 'Siskel Roeper',
       company: 'PBS' 
     });
-        
     return request(app)
       .delete(`/api/v1/reviewer/${reviewer._id}`)
       .then(res => {

@@ -57,6 +57,30 @@ describe('actor tests', () => {
         });
       });
   });
+  it('can update actor by id', async() => {
+    const actor = await Actor.create({
+      name: 'Timothy Olyphant',
+      dob: 'May 20th, 1968',
+      pob: 'Hawaii'
+    });
+    return request(app)
+      .put(`/api/v1/actor/${actor._id}`)
+      .send({ 
+        name: 'Christina Ricci',
+        dob: 'February, 12th, 1989',
+        pob: 'California' })
+      .then(res => {
+        const actorJSON = JSON.parse(JSON.stringify(actor));
+        expect(res.body).toEqual({
+          ...actorJSON,
+          _id: expect.any(String),
+          name: 'Christina Ricci',
+          dob: 'February, 12th, 1989',
+          pob: 'California',
+          __v: 0
+        });
+      });
+  });
   it('can delete an actor by id', async() => {
     const actor = await Actor.create({
       name: 'Timothy Olyphant',
