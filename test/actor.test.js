@@ -6,6 +6,7 @@ const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const Actor = require('../lib/models/Actor');
 const Film = require('../lib/models/Film');
+const Studio = require('../lib/models/Studio');
 
 describe('actor tests', () => {
   beforeAll(() => {
@@ -103,40 +104,40 @@ describe('actor tests', () => {
           _id: actorJSON._id });
       });
   });
-});
-    
-
-
-it('gets actor by id', async() => {
-  const actor = await Actor.create({
-    name: 'Timothy Olyphant',
-    dob: 'May 20th, 1968',
-    pob: 'Hawaii'
-  });
-  const studio = await studio.create({
-    name: 'Laika'
-  });
-  const Film = await Film.create([
-    { 
-      title: 'Mising Link',
-      studio: studio._id,
-      release: 2019,
-      cast: [{
-        actor: actor._id
-      }]
-    }]);
-  return request(app)
-    .get(`/api/v1/actor/${actor._id}`)
-    .then(res => {
-      const actorJSON = JSON.parse(JSON.stringify(actor));
-      expect(res.body).toEqual({
-        ...actorJSON,
-        films: [{
-          _id: expect.any(String),
-          title: 'Missing Link', 
-          release: 2019 
-        }]
-      });
+  it('gets actor by id', async() => {
+    const actor = await Actor.create({
+      name: 'Timothy Olyphant',
+      dob: 'May 20th, 1968',
+      pob: 'Hawaii'
     });
+    const studio = await Studio.create({
+      name: 'Laika'
+    });
+    const film = await Film.create([
+      { 
+        title: 'Missing Link',
+        studio: studio._id,
+        release: 2019,
+        cast: [{
+          actor: actor._id
+        }]
+      }]);
+    return request(app)
+      .get(`/api/v1/actor/${actor._id}`)
+      .then(res => {
+        const actorJSON = JSON.parse(JSON.stringify(actor));
+        console.log(actorJSON);
+        expect(res.body).toEqual({
+          name: 'Timothy Olyphant',
+          dob: 'May 20th, 1968',
+          pob: 'Hawaii',
+          film: [{
+            _id: expect.any(String),
+            title: 'Missing Link', 
+            release: 2019
+          }]
+        });
+      });
+  });
 });
   
