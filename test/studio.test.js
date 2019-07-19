@@ -5,6 +5,8 @@ const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const Studio = require('../lib/models/Studio');
+const Film = require('../lib/models/Film');
+const Actor = require('../lib/models/Actor');
 
 describe('studio tests', () => {
   beforeAll(() => {
@@ -69,19 +71,40 @@ describe('studio tests', () => {
         expect(res.body).toEqual({ name: 'Studio Ghibli', _id: studioJSON._id });
       });
   });
+  it('gets studio by id', async() => {
+    const studio = await Studio.create({
+      name: 'Studio Ghibli',
+      address: { country: 'Japan' }
+    });
+    const actor = await Actor.create({
+      name: 'Chika Sakamoto',
+      dob: 'August 17th, 1959',
+      pob: 'Tokyo'
+    });
+    console.log(actor);
+    await Film.create([{ 
+      title: 'My Neighbor Totoro',
+      studio: studio._id,
+      release: 1988,
+      cast: [{
+        actor: actor._id
+      }]
+    }]);
+    return request(app)
+      .get(`/api/v1/studio/${studio._id}`)
+      .then(res => {
+        console.log(res.body);
+        const studioJSON = JSON.parse(JSON.stringify(studio));
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          name: 'Studio Ghibli',
+          address: { country: 'Japan' },
+          films: [{
+            _id: expect.any(String),
+            title: 'My Neighbor Totoro'
+          }]
+        });
+      });
+  });
 });
 
-// it('gets studio by id', async() => {
-//   const studio = await Studio.create({
-//     name: 'Studio Ghibli',
-//     address: { country: 'Japan' }
-//   });
-
-//   return request(app)
-//     .get(`/api/v1/studio/${studio._id}`)
-//     .then(res => {
-//       const studioJSON = JSON.parse(JSON.stringify(studio));
-//       expect(res.body).toEqual({
-//         ...studioJSON,
-//       });
-//     });

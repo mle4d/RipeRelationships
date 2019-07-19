@@ -17,11 +17,6 @@ describe('actor tests', () => {
     return mongoose.connection.dropDatabase();
   });
 
-  // let film = null;
-  // beforeEach(async() => {
-  //   film = JSON.parse(JSON.stringify(await Film.create({ name: 'Missing Link' })));
-  // });
-
   afterAll(() => {
     return mongoose.connection.close();
   });
@@ -113,20 +108,18 @@ describe('actor tests', () => {
     const studio = await Studio.create({
       name: 'Laika'
     });
-    const film = await Film.create([
-      { 
-        title: 'Missing Link',
-        studio: studio._id,
-        release: 2019,
-        cast: [{
-          actor: actor._id
-        }]
-      }]);
+    await Film.create([{ 
+      title: 'Missing Link',
+      studio: studio._id,
+      release: 2019,
+      cast: [{
+        actor: actor._id
+      }]
+    }]);
     return request(app)
       .get(`/api/v1/actor/${actor._id}`)
       .then(res => {
         const actorJSON = JSON.parse(JSON.stringify(actor));
-        console.log(actorJSON);
         expect(res.body).toEqual({
           name: 'Timothy Olyphant',
           dob: 'May 20th, 1968',
