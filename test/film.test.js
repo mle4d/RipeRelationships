@@ -8,6 +8,7 @@ const Film = require('../lib/models/Film');
 const Studio = require('../lib/models/Studio');
 const Actor = require('../lib/models/Actor');
 
+
 describe('film tests', () => {
   beforeAll(() => {
     connect();
@@ -24,12 +25,11 @@ describe('film tests', () => {
     actor = JSON.parse(JSON.stringify(await Actor.create({ name: 'Johnny Depp' })));
   });
 
-
   afterAll(() => {
     return mongoose.connection.close();
   });
 
-  it('creates film', () => {
+  it('creates film', async() => {
     return request(app)
       .post('/api/v1/film')
       .send({ 
@@ -61,7 +61,6 @@ describe('film tests', () => {
         studio: studio._id,
         release: 1996
       }
-
     ]);
 
     return request(app)
