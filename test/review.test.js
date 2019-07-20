@@ -61,7 +61,6 @@ describe('review routes', () => {
         film: film._id
       })
       .then(res => {
-        console.log(res.body);
         expect(res.body).toEqual({
           _id: expect.any(String),
           rating: 5,
@@ -72,25 +71,21 @@ describe('review routes', () => {
         });
       });
   });
-  it('gets review', async() => {
-    const review = await Review.create(
-      {
-        rating: 4,
-        reviewer: reviewer._id,
-        review: 'This film is fucking gr8',
-        film: film._id
-      }
-    );
+  it('gets 100 reviews', async() => {
+    await Promise.all([...Array(100)].map((i) => {
+      return Review.create(
+        {
+          rating: 4,
+          reviewer: reviewer._id.toString(),
+          review: 'This film is fucking gr8',
+          film: film._id.toString()
+        });
+    }));
       
     return request(app)
       .get('/api/v1/review')
       .then(res => {
-        expect(res.body).toContainEqual({ 
-          _id: expect.any(String),
-          rating: 5,
-          reviewer: reviewer._id,
-          review: 'This film is fucking gr8',
-          film: film._id });
+        expect(res.body).toHaveLength(100);
       });
   });
 });
