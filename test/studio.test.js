@@ -67,8 +67,7 @@ describe('studio tests', () => {
     return request(app)
       .delete(`/api/v1/studio/${studio._id}`)
       .then(res => {
-        const studioJSON = JSON.parse(JSON.stringify(studio));
-        expect(res.body).toEqual({ name: 'Studio Ghibli', _id: studioJSON._id });
+        expect(res.status).toEqual(405);
       });
   });
   it('gets studio by id', async() => {

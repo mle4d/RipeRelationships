@@ -93,10 +93,7 @@ describe('actor tests', () => {
     return request(app)
       .delete(`/api/v1/actor/${actor._id}`)
       .then(res => {
-        const actorJSON = JSON.parse(JSON.stringify(actor));
-        expect(res.body).toEqual({ 
-          name: 'Timothy Olyphant', 
-          _id: actorJSON._id });
+        expect(res.status).toEqual(405);
       });
   });
   it('gets actor by id', async() => {
