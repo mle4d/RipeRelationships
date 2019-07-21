@@ -91,7 +91,6 @@ describe('studio tests', () => {
     return request(app)
       .get(`/api/v1/studio/${studio._id}`)
       .then(res => {
-        // const studioJSON = JSON.parse(JSON.stringify(studio));
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'Studio Ghibli',

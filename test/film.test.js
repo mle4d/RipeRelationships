@@ -74,7 +74,7 @@ describe('film tests', () => {
         });
       });
   });
-  it('can delete an film by id', async() => {
+  it('can delete a film by id', async() => {
     const film = await Film.create({
       title: 'Dead Man',
       studio: studio._id,

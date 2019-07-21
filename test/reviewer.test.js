@@ -5,16 +5,26 @@ const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const Reviewer = require('../lib/models/Reviewer');
+// const Review = require('../lib/models/Review');
+// const Studio = require('../lib/models/Studio');
+// const Actor = require('../lib/models/Actor');
+// const Film = require('../lib/models/Film');
 
 describe('reviewer routes', () => {
   beforeAll(() => {
     connect();
   });
-
+  
   beforeEach(() => {
     return mongoose.connection.dropDatabase();
   });
-
+  
+  // let studio = null;
+  // let film = null;
+  // beforeEach(async() => {
+  //   studio = JSON.parse(JSON.stringify(await Studio.create({ name: 'Colombia Pictures' })));
+  //   film = JSON.parse(JSON.stringify(await Film.create({ name: 'Girl Interrupted', release: 1999 })));
+  // });
   afterAll(() => {
     return mongoose.connection.close();
   });
@@ -54,7 +64,7 @@ describe('reviewer routes', () => {
         });
       });
   });
-  it('can update a reviwer by id', async() => {
+  it('can update a reviewer by id', async() => {
     const reviewer = await Reviewer.create({
       name: 'Siskel Roeper',
       company: 'PBS' 
@@ -76,5 +86,49 @@ describe('reviewer routes', () => {
       });
   });
 });
+// it('gets reviewer by id', async() => {
+//   const reviewer = await Reviewer.create({
+//     name: 'Siskel Roeper',
+//     company: 'PBS' 
+//   });
+//   // const studio = await Studio.create([{
+//   //   name: 'Colombia Pictures',
+//   //   address: { country: 'USA' }
+//   // }]);
+//   const actor = await Actor.create({
+//     name: 'Winona Ryder',
+//   });
+//   const film = await Film.create([{ 
+//     title: 'Girl Interrupted',
+//     release: 1999,
+//     studio: studio._id,
+//     cast: [{
+//       actor: actor._id
+//     }]
+//   }]);
+//   await Review.create([{
+//     rating: 5,
+//     reviewer: reviewer._id,
+//     review: 'I fucking love it'
+//   }]);
+//   return request(app)
+//     .get(`/api/v1/reviewer/${reviewer._id}`)
+//     .then(res => {
+//       expect(res.body).toEqual({
+//         _id: expect.any(String),
+//         name: 'Siskel Roeper',
+//         company: 'PBS',
+//         reviews: [{
+//           _id: expect.any(String),
+//           rating: 5,
+//           review: 'I fucking love it',
+//           film: {
+//             _id: expect.any(String),
+//             title: film.title
+//           } 
+//         }]
+//       });
+//     });
+// });
     
 
