@@ -80,7 +80,6 @@ describe('studio tests', () => {
       dob: 'August 17th, 1959',
       pob: 'Tokyo'
     });
-    console.log(actor);
     await Film.create([{ 
       title: 'My Neighbor Totoro',
       studio: studio._id,
@@ -92,8 +91,7 @@ describe('studio tests', () => {
     return request(app)
       .get(`/api/v1/studio/${studio._id}`)
       .then(res => {
-        console.log(res.body);
-        const studioJSON = JSON.parse(JSON.stringify(studio));
+        // const studioJSON = JSON.parse(JSON.stringify(studio));
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'Studio Ghibli',

@@ -26,7 +26,6 @@ describe('reviewer routes', () => {
         name: 'Siskel Roeper',
         company: 'PBS' })
       .then(res => {
-        console.log(res.body);
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'Siskel Roeper',
