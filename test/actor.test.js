@@ -116,7 +116,6 @@ describe('actor tests', () => {
     return request(app)
       .get(`/api/v1/actor/${actor._id}`)
       .then(res => {
-        const actorJSON = JSON.parse(JSON.stringify(actor));
         expect(res.body).toEqual({
           name: 'Timothy Olyphant',
           dob: 'May 20th, 1968',
