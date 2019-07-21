@@ -76,36 +76,6 @@ describe('reviewer routes', () => {
         });
       });
   });
-  it('can delete a reviewer by id', async() => {
-    const reviewer = await Reviewer.create({
-      name: 'Siskel Roeper',
-      company: 'PBS' 
-    });
-    return request(app)
-      .delete(`/api/v1/reviewer/${reviewer._id}`)
-      .then(res => {
-        const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
-        expect(res.body).toEqual({ 
-          name: 'Siskel Roeper',
-          _id: reviewerJSON._id });
-      });
-  });
 });
     
-
-
-// it('gets reviewer by id', async() => {
-//   const studio = await reviewer.create({
-//     name: 'Siskel Roeper',
-//       company: 'PBS' 
-//   });
-
-//   return request(app)
-//     .get(`/api/v1/reviewer/${reviewer._id}`)
-//     .then(res => {
-//       const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
-//       expect(res.body).toEqual({
-//         ...reviewerJSON,
-//       });
-//     });
 
